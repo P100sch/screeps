@@ -1,0 +1,11 @@
+/.idea/*
+!/.idea/codeStyles/
+!/.idea/inspectionProfiles/
+.gradle/
+out/
+build/
+
+gradle.properties
+
+node_modules/
+package-lock.json

@@ -1,0 +1,29 @@
+language: java
+sudo: false
+jdk:
+  - oraclejdk8
+
+before_cache:
+  - rm -f  $HOME/.gradle/caches/modules-2/modules-2.lock
+  - rm -fr $HOME/.gradle/caches/*/plugin-resolution/
+cache:
+  directories:
+    - $HOME/.gradle/caches/
+    - $HOME/.gradle/wrapper/
+
+install:
+  - ./gradlew assemble
+
+stages:
+  - name: build
+  - name: snapshot
+    if: branch = master
+  - name: release
+    if: branch = release
+
+jobs:
+  include:
+    - stage: build
+      script: ./gradlew build
+    - stage: release
+      script: ./gradlew bintrayUpload -P bintrayUser=$BINTRAY_USER -P bintrayApiKey=$BINTRAY_KEY -Dbuild.number=$TRAVIS_BUILD_NUMBER
